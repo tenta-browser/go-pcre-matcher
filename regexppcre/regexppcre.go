@@ -1,12 +1,12 @@
 package regexppcre
 
 import (
-	"goutils"
 	gore "regexp"
 	"strconv"
 	"strings"
 
-	"github.com/gijsbers/go-pcre"
+	pcre "github.com/gijsbers/go-pcre"
+	"github.com/tenta-browser/goutils"
 )
 
 type pcreEngine struct {
