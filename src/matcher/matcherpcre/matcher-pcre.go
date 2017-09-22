@@ -1,12 +1,13 @@
-package regexppcre
+package matcherpcre
 
 import (
-	gore "regexp"
+	"regexp"
 	"strconv"
 	"strings"
 
-	pcre "github.com/gijsbers/go-pcre"
-	"github.com/tenta-browser/goutils"
+	"matcher"
+
+	"github.com/gijsbers/go-pcre"
 )
 
 type pcreEngine struct {
@@ -22,11 +23,11 @@ type pcreMatcher struct {
 }
 
 // NewEngine creates a direct libpcre regexp engine instance
-func NewEngine() goutils.Engine {
+func NewEngine() matcher.Engine {
 	return &pcreEngine{}
 }
 
-func (e *pcreEngine) Compile(pattern string, flags int) (goutils.Regexp, error) {
+func (e *pcreEngine) Compile(pattern string, flags int) (matcher.Regexp, error) {
 	wre, err := pcre.Compile(pattern, flags)
 	if err != nil {
 		return nil, err
@@ -35,14 +36,14 @@ func (e *pcreEngine) Compile(pattern string, flags int) (goutils.Regexp, error) 
 }
 
 func (e *pcreEngine) Quote(s string) string {
-	return gore.QuoteMeta(s)
+	return regexp.QuoteMeta(s)
 }
 
 func (e *pcreEngine) FlagDotAll() int {
 	return pcre.DOTALL
 }
 
-func (re *pcreRegexp) Search(subject string) goutils.Matcher {
+func (re *pcreRegexp) Search(subject string) matcher.Matcher {
 	wm := re.wre.MatcherString(subject, 0)
 	if !wm.Matches() {
 		return nil

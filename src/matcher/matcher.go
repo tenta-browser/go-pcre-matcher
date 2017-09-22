@@ -1,4 +1,4 @@
-package goutils
+package matcher
 
 import (
 	"strings"
@@ -39,8 +39,9 @@ type Engine interface {
 	FlagDotAll() int
 }
 
-// ReEngine contains the regexp engine which should be used for all matching
-// For local dev runs init this with 'regexppcre.NewEngine()'; from Java it will be inited on app-start
+// ReEngine contains the regexp engine which should be used for all matching;
+// For local dev runs init this with 'matcherpcre.NewEngine()'.
+// For production uses init it from Java with a its implementation.
 var ReEngine Engine
 
 // ReTest runs a quick match, it should be 23,7. What else?
