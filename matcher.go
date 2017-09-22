@@ -20,13 +20,14 @@
  * matcher.go: Matcher interface
  */
 
+// Provides a simple and compatible matcher interface around [Go PCRE](https://github.com/gijsbers/go-pcre).
 package matcher
 
 import (
 	"strings"
 )
 
-// Matcher represents the result of succesful match
+// Matcher represents the result of successful match
 type Matcher interface {
 	// Groups returns the number of capturing groups in the pattern
 	Groups() int
