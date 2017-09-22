@@ -41,7 +41,7 @@ type Engine interface {
 
 // ReEngine contains the regexp engine which should be used for all matching;
 // For local dev runs init this with 'matcherpcre.NewEngine()'.
-// For production uses init it from Java with a its implementation.
+// For production uses init it from Java with its implementation.
 var ReEngine Engine
 
 // ReTest runs a quick match, it should be 23,7. What else?
