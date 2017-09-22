@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"matcher"
+	"github.com/tenta-browser/go-pcre-matcher"
 
 	"github.com/gijsbers/go-pcre"
 )
