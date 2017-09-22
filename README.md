@@ -1,6 +1,8 @@
 Go PCRE Matcher
 ===============
 
+[![GoDoc](https://godoc.org/github.com/tenta-browser/go-pcre-matcher?status.svg)](https://godoc.org/github.com/tenta-browser/go-pcre-matcher)
+
 Provides a simple and compatible matcher interface around [Go PCRE](https://github.com/gijsbers/go-pcre).
 
 Contact: developer@tenta.io
