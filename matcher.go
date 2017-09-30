@@ -20,15 +20,15 @@
  * matcher.go: Matcher interface
  */
 
-// Provides a simple and compatible matcher interface around [Go PCRE](https://github.com/gijsbers/go-pcre).
+// Package matcher provides a simple and compatible matcher interface around [Go PCRE](https://github.com/gijsbers/go-pcre).
 package matcher
 
 import (
 	"strings"
 )
 
-// Matcher represents the result of successful match
-type Matcher interface {
+// Match represents the result of a successful match
+type Match interface {
 	// Groups returns the number of capturing groups in the pattern
 	Groups() int
 	// GroupByIdx returns the value of a group by index
@@ -47,8 +47,8 @@ type Matcher interface {
 
 // Regexp represents compiled regular expression
 type Regexp interface {
-	// Search returns a matcher for the leftmost successful match or nil if the pattern failed to match
-	Search(subject string) Matcher
+	// Search returns the leftmost successful match or nil if the pattern failed to match
+	Search(subject string) Match
 	// Replace replaces every occurrence of the pattern with repl
 	// (group references in repl are in Perl/Java style: $0, $1, $2, ..)
 	Replace(subject, repl string) string

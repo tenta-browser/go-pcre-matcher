@@ -39,7 +39,7 @@ type pcreRegexp struct {
 	wre pcre.Regexp
 }
 
-type pcreMatcher struct {
+type pcreMatch struct {
 	wm      *pcre.Matcher
 	subject string
 }
@@ -65,12 +65,12 @@ func (e *pcreEngine) FlagDotAll() int {
 	return pcre.DOTALL
 }
 
-func (re *pcreRegexp) Search(subject string) matcher.Matcher {
+func (re *pcreRegexp) Search(subject string) matcher.Match {
 	wm := re.wre.MatcherString(subject, 0)
 	if !wm.Matches() {
 		return nil
 	}
-	return &pcreMatcher{wm, subject}
+	return &pcreMatch{wm, subject}
 }
 
 func (re *pcreRegexp) Replace(subject, repl string) string {
@@ -129,19 +129,19 @@ func (re *pcreRegexp) Replace(subject, repl string) string {
 	return strings.Join(parts, "")
 }
 
-func (m *pcreMatcher) Groups() int {
+func (m *pcreMatch) Groups() int {
 	return m.wm.Groups()
 }
 
-func (m *pcreMatcher) GroupByIdx(idx int) string {
+func (m *pcreMatch) GroupByIdx(idx int) string {
 	return m.wm.GroupString(idx)
 }
 
-func (m *pcreMatcher) GroupPresentByIdx(idx int) bool {
+func (m *pcreMatch) GroupPresentByIdx(idx int) bool {
 	return m.wm.Present(idx)
 }
 
-func (m *pcreMatcher) GroupByName(name string) string {
+func (m *pcreMatch) GroupByName(name string) string {
 	group, err := m.wm.NamedString(name)
 	if err != nil {
 		return ""
@@ -149,12 +149,12 @@ func (m *pcreMatcher) GroupByName(name string) string {
 	return group
 }
 
-func (m *pcreMatcher) GroupPresentByName(name string) bool {
+func (m *pcreMatch) GroupPresentByName(name string) bool {
 	present, err := m.wm.NamedPresent(name)
 	return err == nil && present
 }
 
-func (m *pcreMatcher) Next() bool {
+func (m *pcreMatch) Next() bool {
 	matchRegion := m.wm.Index()
 	if matchRegion == nil {
 		// there's no current match, so there's no next one either
