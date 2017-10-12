@@ -78,15 +78,9 @@ func (re *pcreRegexp) Replace(subject, repl string) string {
 	// goals: to work like the one in Java
 	// non-goals: to be fast, since it's for testing only
 	//
-	wm := re.wre.MatcherString(subject, 0)
-	parts := []string{}
-	for wm.Matches() {
-		// append substring up to match
-		idxs := wm.Index()
-		parts = append(parts, subject[:idxs[0]])
-
-		// append replacement
-		ln := len(repl)
+	ln := len(repl)
+	return re.replaceFuncCommon(subject, func(m matcher.Match) string {
+		parts := []string{}
 		for c := 0; ; {
 			b := c
 			for ; c < ln && repl[c] != '\\' && repl[c] != '$'; c++ {
@@ -108,7 +102,7 @@ func (re *pcreRegexp) Replace(subject, repl string) string {
 				grp := ""
 				for ; c < ln && repl[c] >= '0' && repl[c] <= '9'; c++ {
 					ngrp := grp + string(repl[c])
-					if grpn, _ := strconv.Atoi(ngrp); grpn > wm.Groups() {
+					if grpn, _ := strconv.Atoi(ngrp); grpn > m.Groups() {
 						break
 					}
 					grp = ngrp
@@ -117,9 +111,27 @@ func (re *pcreRegexp) Replace(subject, repl string) string {
 					panic("Group index is missing")
 				}
 				grpn, _ := strconv.Atoi(grp)
-				parts = append(parts, wm.GroupString(grpn))
+				parts = append(parts, m.GroupByIdx(grpn))
 			}
 		}
+		return strings.Join(parts, "")
+	})
+}
+
+func (re *pcreRegexp) ReplaceFunc(subject string, replacer matcher.Replacer) string {
+	return re.replaceFuncCommon(subject, replacer.Replacement)
+}
+
+func (re *pcreRegexp) replaceFuncCommon(subject string, replacementFunc func(matcher.Match) string) string {
+	wm := re.wre.MatcherString(subject, 0)
+	parts := []string{}
+	for wm.Matches() {
+		// append substring up to match
+		idxs := wm.Index()
+		parts = append(parts, subject[:idxs[0]])
+
+		// append replacement
+		parts = append(parts, replacementFunc(&pcreMatch{wm, subject}))
 
 		// find next match
 		subject = subject[idxs[1]:]

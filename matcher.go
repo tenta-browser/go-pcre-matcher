@@ -52,6 +52,14 @@ type Regexp interface {
 	// Replace replaces every occurrence of the pattern with repl
 	// (group references in repl are in Perl/Java style: $0, $1, $2, ..)
 	Replace(subject, repl string) string
+	// ReplaceFunc replaces every occurrence of the pattern with
+	// replacements produced by invoking the replacer on every match
+	ReplaceFunc(subject string, replacer Replacer) string
+}
+
+// Replacer produces replacements for matches
+type Replacer interface {
+	Replacement(match Match) string
 }
 
 // Engine represents a regexp engine
