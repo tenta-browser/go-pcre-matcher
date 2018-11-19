@@ -116,18 +116,34 @@ func (re *pcreRegexp) Replace(subject, repl string) string {
 			} else if repl[c] == '$' {
 				c++
 				grp := ""
-				for ; c < ln && repl[c] >= '0' && repl[c] <= '9'; c++ {
-					ngrp := grp + string(repl[c])
-					if grpn, _ := strconv.Atoi(ngrp); grpn > m.Groups() {
-						break
+				part := ""
+				if c < ln && repl[c] == '{' {
+					c++
+					for ; c < ln && repl[c] != '}'; c++ {
+						grp += string(repl[c])
 					}
-					grp = ngrp
+					if c < ln {
+						c++
+					}
+					if grp == "" {
+						panic("Group name is missing")
+					}
+					part = m.GroupByName(grp)
+				} else {
+					for ; c < ln && repl[c] >= '0' && repl[c] <= '9'; c++ {
+						ngrp := grp + string(repl[c])
+						if grpn, _ := strconv.Atoi(ngrp); grpn > m.Groups() {
+							break
+						}
+						grp = ngrp
+					}
+					if grp == "" {
+						panic("Group index is missing")
+					}
+					grpn, _ := strconv.Atoi(grp)
+					part = m.GroupByIdx(grpn)
 				}
-				if grp == "" {
-					panic("Group index is missing")
-				}
-				grpn, _ := strconv.Atoi(grp)
-				parts = append(parts, m.GroupByIdx(grpn))
+				parts = append(parts, part)
 			}
 		}
 		return strings.Join(parts, "")
