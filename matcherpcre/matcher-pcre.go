@@ -65,6 +65,22 @@ func (e *pcreEngine) FlagDotAll() int {
 	return pcre.DOTALL
 }
 
+func (e *pcreEngine) FlagExtended() int {
+	return pcre.EXTENDED
+}
+
+func (e *pcreEngine) FlagUnicode() int {
+	return pcre.UCP
+}
+
+func (e *pcreEngine) FlagCaseInsensitive() int {
+	return pcre.CASELESS
+}
+
+func (e *pcreEngine) FlagMultiline() int {
+	return pcre.MULTILINE
+}
+
 func (re *pcreRegexp) Search(subject string) matcher.Match {
 	wm := re.wre.MatcherString(subject, 0)
 	if !wm.Matches() {

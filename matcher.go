@@ -68,6 +68,10 @@ type Engine interface {
 	Quote(s string) string
 
 	FlagDotAll() int
+	FlagExtended() int
+	FlagUnicode() int
+	FlagCaseInsensitive() int
+	FlagMultiline() int
 }
 
 // ReEngine contains the regexp engine which should be used for all matching;
